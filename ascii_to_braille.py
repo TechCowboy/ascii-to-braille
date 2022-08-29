@@ -139,7 +139,7 @@ def append_braille_strings(s, t):
     return output
 
 
-def display_string_as_braille(s):
+def display_string_as_braille(s, display_ascii=False):
     bstr = ""
     open_double_quote = True
     open_single_quote = True
@@ -164,9 +164,32 @@ def display_string_as_braille(s):
         bstr = append_braille_strings(bstr, symbol_as_string(braille[letter]))
         
     print(bstr)
+    
+    if display_ascii:
+        for c in s:
+            c1 = c
+            if c == '"':
+                if open_double_quote:
+                    c = '"('
+                else:
+                    c = '")'
+                
+                open_double_quote = not open_double_quote
+
+            if c == "'":
+                if open_single_quote:
+                    c = "'("
+                else:
+                    c = "')"
+            
+            open_single_quote = not open_single_quote
+            
+            print(" " * len(braille[c]) * 2, end="")
+            print(c1, end="")
+        print()
         
             
-display_string_as_braille("This is a 'test' of braille")            
+display_string_as_braille("This is a 'test' of braille", True)            
             
 
 
