@@ -86,7 +86,8 @@ braille = {
         '"(': [[0,1,1,0,0,1]],
         '")': [[0,0,1,0,1,1]],
         "'(": [[0,0,0,0,0,1], [0,1,1,0,0,1]],
-        "')": [[0,0,1,0,1,1], [0,0,1,0,0,0]]
+        "')": [[0,0,1,0,1,1], [0,0,1,0,0,0]],
+        '#':  [[0,0,1,1,1,1]]
     }
     
     
@@ -184,13 +185,18 @@ def display_string_as_braille(s, display_ascii=False):
             
             open_single_quote = not open_single_quote
             
-            print(" " * len(braille[c]) * 2, end="")
+            
             print(c1, end="")
+            if len(braille[c])>1:
+                print(" ", end='')
+                
+            print(" " * (len(braille[c]) * 2), end='')
         print()
         
             
 display_string_as_braille("This is a 'test' of braille", True)            
             
+display_string_as_braille("1234567", True)            
 
-
+display_string_as_braille("######", True)    
     
