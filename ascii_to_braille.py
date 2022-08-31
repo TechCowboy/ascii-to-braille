@@ -9,8 +9,9 @@ class ndbraille:
             Dots are not shown by default
             Braille strings are not reversed by default
         '''
-        self.dots = False
-        self.reverse = False
+        self.__dots = False
+        self.__reverse = False
+        self.__show_ascii = False
 
         if lang.lower() == "english":
             self.english(grade)
@@ -24,7 +25,7 @@ class ndbraille:
         '''
         
         if (grade == 1):
-            self.braille = {
+            self.__braille = {
                     'a': [[1,0,0,0,0,0]],
                     'b': [[1,1,0,0,0,0]],
                     'c': [[1,0,0,1,0,0]],
@@ -131,14 +132,14 @@ class ndbraille:
                     x = matrix[row][column]
                     value = symbol[letter][x]
 
-                    if [symbol[letter]] == self.braille[' ']:
+                    if [symbol[letter]] == self.__braille[' ']:
                         # special case -- don't convert spaces between characters to dots
                         output += " "
                     else:
                         if value != 0:
                             output += "*"
                         else:
-                            if self.dots:
+                            if self.__dots:
                                 output += '.'
                             else:
                                 output += ' '
@@ -175,10 +176,10 @@ class ndbraille:
         return output
 
 
-    def ascii_to_braille_string(self, s, display_ascii=False):
+    def ascii_to_braille_string(self, s):
         '''
             Takes an ascii string and converts it to braille.
-            display_ascii if set to True will display the ascii
+            display__ascii if set to True will display the ascii
             character above the braille symbol
             If the "global" reverse is set to true, the
             string returned will be reversed
@@ -190,7 +191,7 @@ class ndbraille:
         open_double_quote = True
         open_single_quote = True
         
-        if display_ascii:
+        if self.__show_ascii:
             for c in s:
                 c1 = c
                 if c == '"':
@@ -211,10 +212,10 @@ class ndbraille:
                 
                 
                 ascii += c1
-                if len(self.braille[c])>1:
+                if len(self.__braille[c])>1:
                     ascii += " "
                     
-                ascii += " " * (len(self.braille[c]) * 2)
+                ascii += " " * (len(self.__braille[c]) * 2)
             ascii += "\n"
             
         open_double_quote = True
@@ -237,13 +238,13 @@ class ndbraille:
                 
                 open_single_quote = not open_single_quote
                 
-            bstr = self.append(bstr, self.symbol_as_string(self.braille[letter]))
+            bstr = self.append(bstr, self.symbol_as_string(self.__braille[letter]))
 
 
-        if display_ascii:
+        if self.__show_ascii:
             bstr = ascii + bstr
         
-        if self.reverse:
+        if self.__reverse:
             bstr = self.reverse_braille(bstr)
         return bstr
     
@@ -260,25 +261,60 @@ class ndbraille:
     
         return r
         
-    def print(self, s, show_ascii=False):
+    def print(self, s):
         '''
             print braille to the console
         '''
-        bstr = self.ascii_to_braille_string(s, show_ascii)
+        bstr = self.ascii_to_braille_string(s)
         print(bstr)
         
+    def show_ascii(self, show=True):
+        '''
+            show the ascii string above the braille
+        '''
+        self.__show_ascii = show
 
+    def hide_ascii(self, show=False):
+        '''
+            do not show the ascii string
+        '''
+        self.__show_ascii = show
 
+    def reverse(self, set_reverse=True):
+        '''
+            reverse the braille string so it
+            could be used in an embosser
+        '''
+        self.__reverse = set_reverse
             
+    def normal(self, set_reverse=False):
+        '''
+            do not reverse the braille string
+        '''
+        self.__reverse = set_reverse
             
+    def show_dots(self, dots=True):
+        '''
+            show dots on braille characters but
+            not on spaces
+        '''
+        self.__dots = dots
+
+    def hide_dots(self, dots=False):
+        '''
+            braille characters appear 'normal'
+        '''
+        self.__dots = dots
+
 if __name__ == "__main__":            
     braille = ndbraille()
-    braille.dots = True
-    
-    braille.print("  A")
-    braille.print("This is a 'test' of braille", True)
-    braille.reverse = True
-    braille.print("This is a 'test' of braille", True)    
+
+    braille.show_dots()
+    braille.show_ascii()
+
+    braille.print("This is a 'test' of braille")
+    braille.reverse()
+    braille.print("This is a 'test' of braille")    
             
  
     
