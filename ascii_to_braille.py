@@ -1,6 +1,10 @@
 
 class ndbraille:
-    
+    '''
+        ndbraille = Braille creator by Norman Davie
+        This class translates ascii strings into their
+        braille equivalent
+    '''
 
     def __init__(self, grade=1, lang="english"):
         '''
@@ -8,14 +12,69 @@ class ndbraille:
             default is English and grade 1
             Dots are not shown by default
             Braille strings are not reversed by default
+            Currently supported Languages and Grades
+                English - Grades: 1
         '''
         self.__dots = False
         self.__reverse = False
         self.__show_ascii = False
-
+        self.__grade = 1
+        self.__language = "english"
+        
+        self.set_language(lang)
+        self.set_grade(grade)
+    
+    
+    def set_language(self, lang):
+        '''
+            Set language for the braille to be translated to.
+            If the language doesn't exist, no change occurs
+            to the current settings and this function returns False
+        '''
         if lang.lower() == "english":
-            self.english(grade)
-            
+            self.english(self.__grade)
+            self.__language = lang.lower()
+            return True
+        else:
+            return False
+        
+    def get_language(self):
+        '''
+            Returns the currently selected language
+        '''
+        return self.__language
+    
+    def set_grade(self, grade):
+        '''
+            Set the grade for the braille; does not change the language
+            If the grade for the currently selected language doesn't
+            exist, no change occurs to the crrent settings and this
+            function returns False
+        '''
+        if grade in [1]:
+            self.__grad = grade
+            return True
+        else:
+            return False
+    
+    def get_grade(self):
+        '''
+            Returns the currently selected grade
+        '''
+        return self.__grade
+
+    def get_info(self):
+        '''
+            Displays the current language and grade
+            and various flags
+        '''
+        print(f"Language:        {self.__language}")
+        print(f"Grade:           {self.__grade}")
+        print(f"Show Dots:       {self.__dots}")
+        print(f"Reverse Braille: {self.__reverse}")
+        print(f"Show ASCII:      {self.__show_ascii}")
+        
+        
     def english(self, grade):
         '''
             Use english braille
@@ -110,6 +169,146 @@ class ndbraille:
                     '#':  [[0,0,1,1,1,1]]
                 }
 
+        if (grade == 2):
+            self.__braille = {
+                    'a': [[1,0,0,0,0,0]],
+                    'b': [[1,1,0,0,0,0]],
+                    'c': [[1,0,0,1,0,0]],
+                    'd': [[1,0,0,1,1,0]],
+                    'e': [[1,0,0,0,1,0]],
+                    'f': [[1,1,0,1,0,0]],
+                    'g': [[1,1,0,1,1,0]],
+                    'h': [[1,1,0,0,1,0]],
+                    'i': [[0,1,0,1,0,0]],
+                    'j': [[0,1,0,1,1,0]],
+                    'k': [[1,0,1,0,0,0]],
+                    'l': [[1,1,1,0,0,0]],
+                    'm': [[1,0,1,1,0,0]],
+                    'n': [[1,0,1,1,1,0]],
+                    'o': [[1,0,1,0,1,0]],
+                    'p': [[1,1,1,1,0,0]],
+                    'q': [[1,1,1,1,1,0]],
+                    'r': [[1,1,1,0,1,0]],
+                    's': [[0,1,1,1,0,0]],
+                    't': [[0,1,1,1,1,0]],
+                    'u': [[1,0,1,0,0,1]],
+                    'v': [[1,1,1,0,0,1]],
+                    'w': [[0,1,0,1,1,1]],
+                    'x': [[1,0,1,1,0,1]],
+                    'y': [[1,0,1,1,1,1]],
+                    'z': [[1,0,1,0,1,1]],
+                    'A': [[0,0,0,0,0,1],[1,0,0,0,0,0]],
+                    'B': [[0,0,0,0,0,1],[1,1,0,0,0,0]],
+                    'C': [[0,0,0,0,0,1],[1,0,0,1,0,0]],
+                    'D': [[0,0,0,0,0,1],[1,0,0,1,1,0]],
+                    'E': [[0,0,0,0,0,1],[1,0,0,0,1,0]],
+                    'F': [[0,0,0,0,0,1],[1,1,0,1,0,0]],
+                    'G': [[0,0,0,0,0,1],[1,1,0,1,1,0]],
+                    'H': [[0,0,0,0,0,1],[1,1,0,0,1,0]],
+                    'I': [[0,0,0,0,0,1],[0,1,0,1,0,0]],
+                    'J': [[0,0,0,0,0,1],[0,1,0,1,1,0]],
+                    'K': [[0,0,0,0,0,1],[1,0,1,0,0,0]],
+                    'L': [[0,0,0,0,0,1],[1,1,1,0,0,0]],
+                    'M': [[0,0,0,0,0,1],[1,0,1,1,0,0]],
+                    'N': [[0,0,0,0,0,1],[1,0,1,1,1,0]],
+                    'O': [[0,0,0,0,0,1],[1,0,1,0,1,0]],
+                    'P': [[0,0,0,0,0,1],[1,1,1,1,0,0]],
+                    'Q': [[0,0,0,0,0,1],[1,1,1,1,1,0]],
+                    'R': [[0,0,0,0,0,1],[1,1,1,0,1,0]],
+                    'S': [[0,0,0,0,0,1],[0,1,1,1,0,0]],
+                    'T': [[0,0,0,0,0,1],[0,1,1,1,1,0]],
+                    'U': [[0,0,0,0,0,1],[1,0,1,0,0,1]],
+                    'V': [[0,0,0,0,0,1],[1,1,1,0,0,1]],
+                    'W': [[0,0,0,0,0,1],[0,1,0,1,1,1]],
+                    'X': [[0,0,0,0,0,1],[1,0,1,1,0,1]],
+                    'Y': [[0,0,0,0,0,1],[1,0,1,1,1,1]],
+                    'Z': [[0,0,0,0,0,1],[1,0,1,0,1,1]],
+                    '1': [[0,0,1,1,1,1],[1,0,0,0,0,0]],
+                    '2': [[0,0,1,1,1,1],[1,1,0,0,0,0]],
+                    '3': [[0,0,1,1,1,1],[1,0,0,1,0,0]],
+                    '4': [[0,0,1,1,1,1],[1,0,0,1,1,0]],
+                    '5': [[0,0,1,1,1,1],[1,0,0,0,1,0]],
+                    '6': [[0,0,1,1,1,1],[1,1,0,0,1,0]],
+                    '7': [[0,0,1,1,1,1],[1,1,0,1,1,0]],
+                    '8': [[0,0,1,1,1,1],[1,1,0,0,1,0]],
+                    '9': [[0,0,1,1,1,1],[0,1,0,1,0,0]],
+                    '0': [[0,0,1,1,1,1],[0,1,0,1,1,0]],
+                    '?': [[0,1,1,0,0,1]],
+                    '!': [[0,1,1,0,1,0]],
+                    ',': [[0,1,0,0,0,0]],
+                    '-': [[0,0,1,0,0,1]],
+                    '@': [[0,0,1,1,1,0]],
+                    '+': [[0,1,1,0,1,0]],
+                    '=': [[0,1,1,0,1,1]],
+                    '.': [[0,0,0,0,0,1]],
+                    '(': [[0,1,1,0,0,1]],
+                    ')': [[0,0,1,0,1,1]],
+                    '*': [[0,0,1,0,1,0]],
+                    ':': [[0,1,0,0,1,0]],
+                    '/': [[0,0,1,1,0,0]],
+                    ' ': [[0,0,0,0,0,0]],
+                    ';': [[0,1,1,0,0,0]],
+                    '"(': [[0,1,1,0,0,1]],
+                    '")': [[0,0,1,0,1,1]],
+                    "'(": [[0,0,0,0,0,1], [0,1,1,0,0,1]],
+                    "')": [[0,0,1,0,1,1], [0,0,1,0,0,0]],
+                    '#':  [[0,0,1,1,1,1]],
+                    'but': [[1,1,0,0,0,0]],
+                    'can': [[1,0,0,1,0,0]],
+                    'do': [[1,0,0,1,1,0]],
+                    'every': [[1,0,0,0,1,0]],
+                    'from': [[1,1,0,1,0,0]],
+                    'have': [[1,1,0,1,1,0]],
+                    'just': [[1,1,0,0,1,0]],
+                    'go': [[1,1,0,1,1,0]],
+                    'have': [[1,1,0,0,1,0]],
+                    'just': [[0,1,0,1,1,0]],
+                    'knowledge': [[0,0,0,1,0,1]],
+                    'like': [[1,1,1,0,0,0]],
+                    'more': [[1,0,1,1,0,0]],
+                    'not': [[1,0,1,1,1,0]],
+                    'people': [[1,1,1,1,0,0]],
+                    'quite': [[1,1,1,1,1,0]],
+                    'rather': [[1,1,1,0,1,0]],
+                    'so': [[0,1,1,1,0,0]],
+                    'that': [[0,1,1,1,1,0]],
+                    'us': [[1,0,1,1,0,0]],
+                    'very': [[1,1,1,0,0,1]],
+                    'will': [[0,1,0,1,1,1]],
+                    'it': [[1,0,1,1,0,1]],
+                    'you': [[1,0,1,1,1,1]],
+                    'as': [[1,0,1,0,1,1]],
+                    'and': [[1,1,1,1,0,1]],
+                    'for': [[1,1,1,1,1,1]],
+                    'of': [[1,1,1,0,1,1]],
+                    'the': [[0,1,1,1,0,1]],
+                    'with': [[0,1,1,1,1,1]],
+                    'child': [[1,0,0,0,0,1]],
+                    'ch': [[1,0,0,0,0,1]],
+                    'gh': [[1,1,0,0,0,1]],
+                    'shall': [[1,0,0,1,0,1]],
+                    'sh': [[1,0,0,1,0,1]],
+                    'this': [[1,0,0,1,1,1]],
+                    'which': [[1,0,0,0,1,1]],
+                    'wh': [[1,0,0,0,1,1]],
+                    'ed': [[1,1,0,1,0,1]],
+                    'er': [[1,1,0,1,1,1]],
+                    'out': [[1,1,0,0,1,1]],
+                    'ou': [[1,1,0,0,1,1]],
+                    'ow': [[0,1,0,1,0,1]],
+                    'bb': [[0,1,1,0,0,0]],
+                    'cc': [[0,1,0,1,0,0]],
+                    'dd': [[0,1,0,0,1,1]],
+                    'en': [[0,1,0,0,0,1]],
+                    'were': [[0,1,1,0,1,1]],
+                    'gg': [[0,1,1,0,1,1]],
+                    'in': [[0,0,1,0,1,0]],
+                    'st': [[0,0,1,1,0,0]],
+                    'ing': [[0,0,1,1,0,1]],
+                    'arn': [[0,0,1,1,1,0]]
+                    
+                }
+
 
     
     def symbol_as_string(self, symbol):
@@ -148,7 +347,6 @@ class ndbraille:
             output += "\n"
         return output
         
-
 
     def append(self, s, t):
         '''
@@ -312,10 +510,14 @@ if __name__ == "__main__":
     braille.show_dots()
     braille.show_ascii()
 
+    braille.get_info()
+    
     braille.print("This is a 'test' of braille")
     braille.reverse()
-    braille.print("This is a 'test' of braille")    
+    braille.print("This is a 'test' of braille")
+    braille.normal()
+    
             
  
-    
+    help(ndbraille) 
     
