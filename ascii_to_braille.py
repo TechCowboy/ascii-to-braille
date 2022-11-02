@@ -1,3 +1,6 @@
+'''
+Created by Norman Davie
+'''
 
 class ndbraille:
     '''

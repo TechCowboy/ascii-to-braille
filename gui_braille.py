@@ -1,3 +1,6 @@
+'''
+ Created by Norman Davie
+'''
 import PySimpleGUI as sg
 from ascii_to_braille import ndbraille
 import threading
