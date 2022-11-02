@@ -1,6 +1,9 @@
-'''
-Created by Norman Davie
-'''
+#!/usr/bin/env python3
+# Nov 2, 2022 16:00
+# gui_baille.py
+
+# Copyright (c) Norman Davie
+
 import PySimpleGUI as sg
 from ascii_to_braille import ndbraille
 import threading

@@ -1,6 +1,8 @@
-'''
-Created by Norman Davie
-'''
+#!/usr/bin/env python3
+# Nov 2, 2022 16:00
+# ascii_to_braille.py
+
+# Copyright (c) Norman Davie
 
 class ndbraille:
     '''
