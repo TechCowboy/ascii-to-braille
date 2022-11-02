@@ -123,7 +123,7 @@ class gui_braille(ndbraille):
             If the language doesn't exist, no change occurs
             to the current settings and this function returns False
         '''
-        result = super().set_language(lang)
+        super().set_language(lang)
         
         if lang.lower() == "english":
             self.english(self._grade)

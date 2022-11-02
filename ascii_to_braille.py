@@ -15,11 +15,11 @@ class ndbraille:
             Currently supported Languages and Grades
                 English - Grades: 1
         '''
-        self.__dots = False
-        self.__reverse = False
-        self.__show_ascii = False
-        self.__grade = 1
-        self.__language = "english"
+        self._dots = False
+        self._reverse = False
+        self._show_ascii = False
+        self._grade = 1
+        self._language = "english"
         
         self.set_language(lang)
         self.set_grade(grade)
@@ -32,8 +32,8 @@ class ndbraille:
             to the current settings and this function returns False
         '''
         if lang.lower() == "english":
-            self.english(self.__grade)
-            self.__language = lang.lower()
+            self.english(self._grade)
+            self._language = lang.lower()
             return True
         else:
             return False
@@ -42,7 +42,7 @@ class ndbraille:
         '''
             Returns the currently selected language
         '''
-        return self.__language
+        return self._language
     
     def set_grade(self, grade):
         '''
@@ -52,8 +52,8 @@ class ndbraille:
             function returns False
         '''
         if grade in [1,2]:
-            self.__grade = grade
-            self.set_language(self.__language)
+            self._grade = grade
+            self.set_language(self._language)
             return True
         else:
             return False
@@ -62,18 +62,18 @@ class ndbraille:
         '''
             Returns the currently selected grade
         '''
-        return self.__grade
+        return self._grade
 
     def get_info(self):
         '''
             Displays the current language and grade
             and various flags
         '''
-        print(f"Language:        {self.__language}")
-        print(f"Grade:           {self.__grade}")
-        print(f"Show Dots:       {self.__dots}")
-        print(f"Reverse Braille: {self.__reverse}")
-        print(f"Show ASCII:      {self.__show_ascii}")
+        print(f"Language:        {self._language}")
+        print(f"Grade:           {self._grade}")
+        print(f"Show Dots:       {self._dots}")
+        print(f"Reverse Braille: {self._reverse}")
+        print(f"Show ASCII:      {self._show_ascii}")
         
         
     def english(self, grade):
@@ -84,7 +84,7 @@ class ndbraille:
             to the appropriate braille grade
         '''
         
-        self.__braille_basic = {
+        self._braille_basic = {
             'a': [[1,0,0,0,0,0]],
             'b': [[1,1,0,0,0,0]],
             'c': [[1,0,0,1,0,0]],
@@ -166,17 +166,18 @@ class ndbraille:
             '")': [[0,0,1,0,1,1]],
             "'(": [[0,0,0,0,0,1], [0,1,1,0,0,1]],
             "')": [[0,0,1,0,1,1], [0,0,1,0,0,0]],
+            "'":  [[0,0,1,0,0,0]],
             '#':  [[0,0,1,1,1,1]]
         }
         
         if (grade == 1):
-            self.__braille_endings    = { }
-            self.__braille_whole_word = { }
-            self.__braille_pattern    = { }
+            self._braille_endings    = { }
+            self._braille_whole_word = { }
+            self._braille_pattern    = { }
                     
 
         if (grade == 2):
-            self.__braille_endings = {
+            self._braille_endings = {
                             # only at end of word
                 'ence': [[0,0,0,0,1,1],[1,0,0,0,1,0]],
                 'ong':  [[0,0,0,0,1,1],[1,1,0,1,1,0]],
@@ -194,7 +195,7 @@ class ndbraille:
                 'ount': [[0,0,0,1,0,1],[0,1,1,1,1,0]]
                 }
 
-            self.__braille_whole_word = {
+            self._braille_whole_word = {
                     # whole word
                     'but':    [[1,1,0,0,0,0]],
                     'can':    [[1,0,0,1,0,0]],
@@ -232,7 +233,7 @@ class ndbraille:
                     'which':  [[1,0,0,0,1,1]]
                 }
                 
-            self.__braille_pattern = {
+            self._braille_pattern = {
                     'wh':     [[1,0,0,0,1,1]],
                     'ed':     [[1,1,0,1,0,1]],
                     'er':     [[1,1,0,1,1,1]],
@@ -275,14 +276,14 @@ class ndbraille:
                     x = matrix[row][column]
                     value = symbol[letter][x]
 
-                    if [symbol[letter]] == self.__braille_basic[' ']:
+                    if [symbol[letter]] == self._braille_basic[' ']:
                         # special case -- don't convert spaces between characters to dots
                         output += " "
                     else:
                         if value != 0:
                             output += "*"
                         else:
-                            if self.__dots:
+                            if self._dots:
                                 output += '.'
                             else:
                                 output += ' '
@@ -322,17 +323,17 @@ class ndbraille:
         output = ''
         
         complete_word = False
-        for key in self.__braille_whole_word:
+        for key in self._braille_whole_word:
             if s == key:
-                output = self.symbol_as_string(self.__braille_whole_word[key])
+                output = self.symbol_as_string(self._braille_whole_word[key])
                 complete_word = True
                 break
             
         if not complete_word:
             # check for special ending
-            for key in self.__braille_endings:
+            for key in self._braille_endings:
                 if s.endswith(key):
-                    ends_with = self.symbol_as_string(self.__braille_endings[key])
+                    ends_with = self.symbol_as_string(self._braille_endings[key])
                     s = s[:-len(key)]
                     break
             
@@ -345,17 +346,17 @@ class ndbraille:
                     pattern_found = False
                     pattern = ''
                     substring = s[i:]
-                    for key in self.__braille_pattern:
+                    for key in self._braille_pattern:
                         if substring.startswith(key):
                             pattern = key
                             pattern_found = True
                             break
                         
                     if pattern_found:
-                        output = self.append(output, self.symbol_as_string(self.__braille_pattern[pattern]))
+                        output = self.append(output, self.symbol_as_string(self._braille_pattern[pattern]))
                         i += len(pattern)
                     else:
-                        output = self.append(output, self.symbol_as_string(self.__braille_basic[substring[0]]))
+                        output = self.append(output, self.symbol_as_string(self._braille_basic[substring[0]]))
                         i += 1
             
         output = self.append(output, ends_with)
@@ -364,7 +365,7 @@ class ndbraille:
     def ascii_to_braille_string(self, s):
         '''
             Takes an ascii string and converts it to braille.
-            display__ascii if set to True will display the ascii
+            display_ascii if set to True will display the ascii
             character above the braille symbol
             If the "global" reverse is set to true, the
             string returned will be reversed
@@ -376,7 +377,7 @@ class ndbraille:
         open_double_quote = True
         open_single_quote = True
         
-        if self.__show_ascii:
+        if self._show_ascii:
             for c in s:
                 c1 = c
                 if c == '"':
@@ -397,10 +398,10 @@ class ndbraille:
                 
                 
                 ascii += c1
-                if len(self.__braille_basic[c])>1:
+                if len(self._braille_basic[c])>1:
                     ascii += " "
                     
-                ascii += " " * (len(self.__braille_basic[c]) * 2)
+                ascii += " " * (len(self._braille_basic[c]) * 2)
             ascii += "\n"
             
         open_double_quote = True
@@ -423,13 +424,13 @@ class ndbraille:
                 
                 open_single_quote = not open_single_quote
                 
-            bstr = self.append(bstr, self.symbol_as_string(self.__braille_basic[letter]))
+            bstr = self.append(bstr, self.symbol_as_string(self._braille_basic[letter]))
 
 
-        if self.__show_ascii:
+        if self._show_ascii:
             bstr = ascii + bstr
         
-        if self.__reverse:
+        if self._reverse:
             bstr = self.reverse_braille(bstr)
         return bstr
     
@@ -457,39 +458,39 @@ class ndbraille:
         '''
             show the ascii string above the braille
         '''
-        self.__show_ascii = show
+        self._show_ascii = show
 
     def hide_ascii(self, show=False):
         '''
             do not show the ascii string
         '''
-        self.__show_ascii = show
+        self._show_ascii = show
 
     def reverse(self, set_reverse=True):
         '''
             reverse the braille string so it
             could be used in an embosser
         '''
-        self.__reverse = set_reverse
+        self._reverse = set_reverse
             
     def normal(self, set_reverse=False):
         '''
             do not reverse the braille string
         '''
-        self.__reverse = set_reverse
+        self._reverse = set_reverse
             
     def show_dots(self, dots=True):
         '''
             show dots on braille characters but
             not on spaces
         '''
-        self.__dots = dots
+        self._dots = dots
 
     def hide_dots(self, dots=False):
         '''
             braille characters appear 'normal'
         '''
-        self.__dots = dots
+        self._dots = dots
 
 if __name__ == "__main__":            
     braille = ndbraille()
